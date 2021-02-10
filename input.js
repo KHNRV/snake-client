@@ -1,5 +1,9 @@
+const { MOVEMENT, QUICKCHAT, SPEED } = require("./constants");
 // Stores the active TCP connection object.
 let connection;
+
+// Track the actual movement in progress
+let actualMovID = 0;
 
 const handleUserInput = (key) => {
   if (key === "\u0003") {
@@ -7,18 +11,17 @@ const handleUserInput = (key) => {
     console.log("Thanks for using me, ciao!");
     // before terminating
     process.exit();
-  } else if (key === "w") {
-    connection.write("Move: up");
-    // console.log("up");
-  } else if (key === "s") {
-    connection.write("Move: down");
-    // console.log("down");
-  } else if (key === "a") {
-    connection.write("Move: left");
-    // console.log("left");
-  } else if (key === "d") {
-    connection.write("Move: right");
-    // console.log("right");
+  } else if (Object.keys(MOVEMENT).includes(key)) {
+    // Stop the last ongoing movement
+    if (actualMovID !== 0) {
+      clearInterval(actualMovID);
+    }
+    // Start a movement and save its ID to be able to stop it later
+    actualMovID = setInterval(() => {
+      connection.write(`Move: ${key}`);
+    }, SPEED);
+  } else if (Object.keys(QUICKCHAT).includes(key)) {
+    connection.write(`Say: ${QUICKCHAT[key]}`);
   }
 };
 
