@@ -23,6 +23,7 @@ const connect = function() {
 
   // send player name to server
   conn.write("Name: KHN");
+
   return conn;
 };
 
