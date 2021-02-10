@@ -13,9 +13,16 @@ const connect = function() {
 
   // log to the console the messages the server sends us
   conn.on("data", (data) => {
-    console.log("snek-multiplayer says: ", data);
+    console.log("Game server says: ", data);
   });
 
+  // log message when client has successfully connected to game server
+  conn.on("connect", () =>
+    console.log("Successfully connected to game server")
+  );
+
+  // send player name to server
+  conn.write("Name: KHN");
   return conn;
 };
 
